@@ -1,5 +1,4 @@
  h1 {
-   color: orangered;
    font-size: 45px;
  }
 
@@ -14,7 +13,7 @@
  #b8,
  #b9 {
    width: 80px;
-   height: 52px;
+   height: 80px;
    margin: auto;
    border: 1px solid gray;
    border-radius: 6px;
@@ -51,16 +50,10 @@
  /* Main Container */
  #main {
    text-align: center;
+   font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif ;
  }
 
- /* Game Instruction Text */
- #ins {
-   font-family: Verdana,
-     Geneva, Tahoma, sans-serif;
-
-   color: dodgerblue;
-   font-size: 17px;
- }
+ 
 
 
  *,
