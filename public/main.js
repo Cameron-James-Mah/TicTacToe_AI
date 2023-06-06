@@ -279,11 +279,14 @@ function minimax(currentBoard, maximizing){
     if(moves.length == 0){
         return 0
     }
-    
+    /*
     for(let move of moves){//check for winning moves
-        if(winningMove(currentBoard, '0')){
+        if(winningMove(currentBoard, '0')){ 
             return 1
         }
+    }*/
+    if(winningMove(currentBoard, '0')){
+        return 1
     }
     curr = -1
     for(let move of moves){
@@ -298,10 +301,14 @@ function minimax(currentBoard, maximizing){
     if(moves.length == 0){
         return 0
     }
+    /*
     for(let move of moves){//check for winning moves
         if(winningMove(currentBoard, 'X')){
             return -1
         }
+    }*/
+    if(winningMove(currentBoard, 'X')){
+        return -1
     }
     curr = 1
     for(let move of moves){
@@ -412,7 +419,7 @@ function reset() {
       ["", "", ""],
       ["", "", ""]
     ]
-  
+    document.getElementById('print').innerHTML = ''
     if(document.getElementById('AI_First').checked){
         //console.log('AI moving first')
         start()
