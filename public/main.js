@@ -196,7 +196,7 @@ function checkBoard(){
     }
 }
 
-function myfunc() {
+function start() {
     // Checking of Player X finish
     // Checking for Player 0 starts, Is player 0 won or
     // not and after that disabled all the other fields
@@ -385,8 +385,8 @@ function copyBoard(arr){
 }
 
 // Function to reset game
-function myfunc_2() {
-    location.reload();
+function reset() {
+    //location.reload();
     document.getElementById('b1').value = '';
     document.getElementById("b2").value = '';
     document.getElementById("b3").value = '';
@@ -397,73 +397,87 @@ function myfunc_2() {
     document.getElementById("b8").value = '';
     document.getElementById("b9").value = '';
 
+    document.getElementById('b1').disabled = false;
+    document.getElementById('b2').disabled = false;
+    document.getElementById('b3').disabled = false;
+    document.getElementById('b4').disabled = false;
+    document.getElementById('b5').disabled = false;
+    document.getElementById('b6').disabled = false;
+    document.getElementById('b7').disabled = false;
+    document.getElementById('b8').disabled = false;
+    document.getElementById('b9').disabled = false;
+
     board = [
       ["", "", ""],
       ["", "", ""],
       ["", "", ""]
     ]
   
+    if(document.getElementById('AI_First').checked){
+        //console.log('AI moving first')
+        start()
+    }
 }
   
 function myfunc_3() {
     document.getElementById("b1").value = "X";
     document.getElementById("b1").disabled = true;
     board[0][0] = 'X'
-    myfunc()
+    start()
 }
   
 function myfunc_4() {
     document.getElementById("b2").value = "X";
     document.getElementById("b2").disabled = true;
     board[0][1] = 'X'
-    myfunc()
+    start()
 }
   
 function myfunc_5() {
     document.getElementById("b3").value = "X";
     document.getElementById("b3").disabled = true;
     board[0][2] = 'X'
-    myfunc()
+    start()
 }
   
 function myfunc_6() {
     document.getElementById("b4").value = "X";
     document.getElementById("b4").disabled = true;
     board[1][0] = 'X'
-    myfunc()
+    start()
 }
   
 function myfunc_7() {
     document.getElementById("b5").value = "X";
     document.getElementById("b5").disabled = true;
     board[1][1] = 'X'
-    myfunc()
+    start()
 }
   
 function myfunc_8() {
     document.getElementById("b6").value = "X";
     document.getElementById("b6").disabled = true;
     board[1][2] = 'X'
-    myfunc()
+    start()
 }
   
 function myfunc_9() {
     document.getElementById("b7").value = "X";
     document.getElementById("b7").disabled = true;
     board[2][0] = 'X'
-    myfunc()
+    start()
 }
   
 function myfunc_10() {
     document.getElementById("b8").value = "X";
     document.getElementById("b8").disabled = true;
     board[2][1] = 'X'
-    myfunc()
+    start()
 }
   
 function myfunc_11() {
     document.getElementById("b9").value = "X";
     document.getElementById("b9").disabled = true;
     board[2][2] = 'X'
-    myfunc()
+    start()
 }

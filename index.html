@@ -12,10 +12,6 @@
   <div id="main">
     <h1>TIC TAC TOE AI</h1>
 
-
-
-
-
     <br><br>
     <input type="text" id="b1" onclick="myfunc_3();" readonly>
 
@@ -38,9 +34,15 @@
     <input type="text" id="b9" onclick="myfunc_11();" readonly>
 
     <br><br><br>
-    <button id="but" onclick="myfunc_2()">
-      RESET
+    <button id="but" onclick="reset()">
+      RESTART
     </button>
+    <br><br><br>
+    <label class="toggle">
+      <input class="toggle-checkbox" type="checkbox" id = 'AI_First'>
+      <div class="toggle-switch"></div>
+      <span class="toggle-label">AI Move first</span>
+    </label>
 
     <br><br>
     <p id="print"></p>
