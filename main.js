@@ -4,7 +4,7 @@ let board = [
   ["", "", ""]
 ]
 function myfunc() {
-  
+    console.log('\n')
     // Setting DOM to all boxes or input field
     var b1, b2, b3, b4, b5, b6, b7, b8, b9;
     b1 = document.getElementById("b1").value;
@@ -198,66 +198,158 @@ function myfunc() {
     else {
           //minimax call
           //make sure im passing array by value
-          minimax(board, false) //change to true
+          let moves = getMoves(board)
+          let best = {}
+          let bestVal = -1
+          //console.log(moves)
+          if(moves){
+            for (let move of moves){//do a minimax call for each possible strating move
+                let newBoard = copyBoard(board)
+                newBoard[move.y][move.x] = '0'
+                let currVal = minimax(newBoard, false)
+                if(currVal > bestVal){
+                    best = move
+                    bestVal = currVal
+                }
+            }
+            console.log(bestVal)
+            //console.log(best)
+            board[best.y][best.x] = '0'
+            if(best.y == 0 && best.x == 0){
+                document.getElementById("b1").value = "0";
+                document.getElementById("b1").disabled = true;
+            }
+            else if(best.y == 0 && best.x == 1){
+                document.getElementById("b2").value = "0";
+                document.getElementById("b2").disabled = true;
+            }
+            else if(best.y == 0 && best.x == 2){
+                document.getElementById("b3").value = "0";
+                document.getElementById("b3").disabled = true;
+            }
+            else if(best.y == 1 && best.x == 0){
+                document.getElementById("b4").value = "0";
+                document.getElementById("b4").disabled = true;
+            }
+            else if(best.y == 1 && best.x == 1){
+                document.getElementById("b5").value = "0";
+                document.getElementById("b5").disabled = true;
+            }
+            else if(best.y == 1 && best.x == 2){
+                document.getElementById("b6").value = "0";
+                document.getElementById("b6").disabled = true;
+            }
+            else if(best.y == 2 && best.x == 0){
+                document.getElementById("b7").value = "0";
+                document.getElementById("b7").disabled = true;
+            }
+            else if(best.y == 2 && best.x == 1){
+                document.getElementById("b8").value = "0";
+                document.getElementById("b8").disabled = true;
+            }
+            else if(best.y == 2 && best.x == 2){
+                document.getElementById("b9").value = "0";
+                document.getElementById("b9").disabled = true;
+            }
+            else{
+                console.log('error printing move')
+            }
+            
+            
+          }
+          
+          
           
         
     }
 }
 
-function minimax(currentBoard, maximizing){
+
+
+function minimax(currentBoard, maximizing){ 
   //get valid moves, if no valid moves then reached depth
+  let curr = 0
+  //console.log(currentBoard)
+  if(winningMove(currentBoard, '0') && !maximizing){
+    return 1
+  }
+  if(winningMove(currentBoard, 'X') && maximizing){
+    return -1
+  }
   if(maximizing){ //Looking at moves for AI
-    let moves = getMoves(currentBoard, '0')
-    if(!moves){
-        return evalBoard(currentBoard)
+    let moves = getMoves(currentBoard)
+    if(moves.length == 0){
+        return 0
     }
+    
+    for(let move of moves){//check for winning moves
+        if(winningMove(currentBoard, '0')){
+            return 1
+        }
+    }
+    curr = -1
+    for(let move of moves){
+        let newBoard = copyBoard(currentBoard)
+        newBoard[move.y][move.x] = '0'    
+        curr = Math.max(minimax(newBoard, false), curr)
+    }
+    
   }
   else{//Looking at moves for player
-    let moves = getMoves(currentBoard, 'X')
-    if(!moves){
-        return evalBoard(currentBoard)
+    let moves = getMoves(currentBoard)
+    if(moves.length == 0){
+        return 0
     }
+    for(let move of moves){//check for winning moves
+        if(winningMove(currentBoard, 'X')){
+            return -1
+        }
+    }
+    curr = 1
+    for(let move of moves){
+        let newBoard = copyBoard(currentBoard)
+        newBoard[move.y][move.x] = 'X'    
+        curr = Math.min(minimax(newBoard, true), curr)
+    }
+    
   }
-  
+  return curr
 }
 
 //return an array of valid moves
-function getMoves(currentBoard, player){
+function getMoves(currentBoard){
     let moves = []
     for(let i = 0; i < board[0].length; i++){
         for(let j = 0; j < board.length; j++){
             if(!currentBoard[i][j]){
-                let temp = copyBoard(currentBoard)
-                temp[i][j] = player
-                if(!winningMove(temp, i, j, player)){
-                    moves.push(temp)
-                }
-                else{
-                    //console.log(temp)
-                    //return value for guranteed win depending on player
-                }
-                //console.log(temp)
+                moves.push({y: i, x: j})
             }
         }
     }
     return moves
 }
 
-function winningMove(currentBoard, y, x, player){
-    for(let i = 0; i <= 2; i++){ //check vertical line
-        if(currentBoard[y][i] != player){
-            break;
-        }
-        if(i == 2){
-            return true
+function winningMove(newBoard, player){
+    let currentBoard = copyBoard(newBoard)
+    //console.log(currentBoard)
+    for(let i = 0; i <= 2; i++){ //check horizontal lines
+        for(let j = 0; j <= 2; j++){
+            if(currentBoard[i][j] != player){ 
+                break;
+            }
+            if(j == 2){
+                return true
+            }
         }
     }
-    for(let i = 0; i <= 2; i++){
-        if(currentBoard[i][x] != player){ //check horizontal line
-            break;
-        }
-        if(i == 2){
-            return true
+    for(let i = 0; i <= 2; i++){ //check vertical lines
+        for(let j = 0; j <= 2; j++){
+            if(currentBoard[j][i] != player){ 
+                break;
+            }
+            if(j == 2){
+                return true
+            }
         }
     }
     for(let i = 0; i <= 2; i++){//top left to bottom right line
@@ -271,22 +363,14 @@ function winningMove(currentBoard, y, x, player){
     if(currentBoard[0][2] == player && currentBoard[1][1] == player && currentBoard[2][0] == player){
         return true
     }
-    
-    
-
+    return false
 }
-
-
-
 
 //AI positive eval
 //Player negative eval
 //consider: win, draw (1 = AI win, 0 = draw, -1 = player win)
 //assume: I am able to calculate moves to max depth
 
-function evalBoard(){
-
-}
   
 
 function copyBoard(arr){
@@ -327,52 +411,61 @@ function myfunc_3() {
     document.getElementById("b1").value = "X";
     document.getElementById("b1").disabled = true;
     board[0][0] = 'X'
+    myfunc()
 }
   
 function myfunc_4() {
     document.getElementById("b2").value = "X";
     document.getElementById("b2").disabled = true;
     board[0][1] = 'X'
+    myfunc()
 }
   
 function myfunc_5() {
     document.getElementById("b3").value = "X";
     document.getElementById("b3").disabled = true;
     board[0][2] = 'X'
+    myfunc()
 }
   
 function myfunc_6() {
     document.getElementById("b4").value = "X";
     document.getElementById("b4").disabled = true;
     board[1][0] = 'X'
+    myfunc()
 }
   
 function myfunc_7() {
     document.getElementById("b5").value = "X";
     document.getElementById("b5").disabled = true;
     board[1][1] = 'X'
+    myfunc()
 }
   
 function myfunc_8() {
     document.getElementById("b6").value = "X";
     document.getElementById("b6").disabled = true;
     board[1][2] = 'X'
+    myfunc()
 }
   
 function myfunc_9() {
     document.getElementById("b7").value = "X";
     document.getElementById("b7").disabled = true;
     board[2][0] = 'X'
+    myfunc()
 }
   
 function myfunc_10() {
     document.getElementById("b8").value = "X";
     document.getElementById("b8").disabled = true;
     board[2][1] = 'X'
+    myfunc()
 }
   
 function myfunc_11() {
     document.getElementById("b9").value = "X";
     document.getElementById("b9").disabled = true;
     board[2][2] = 'X'
+    myfunc()
 }
