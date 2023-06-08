@@ -3,6 +3,7 @@ let board = [
   ["", "", ""],
   ["", "", ""]
 ]
+let perms = 0
 function checkBoard(){
     console.log('\n')
     // Setting DOM to all boxes or input field
@@ -112,6 +113,7 @@ function checkBoard(){
         document.getElementById("b8").disabled = true;
         document.getElementById("b9").disabled = true;
         document.getElementById('print').innerHTML = "AI Won"
+        document.getElementById('roboText').innerHTML = 'Good Game!'
     }
     else if ((b1 == 'O' || b1 == 'O') && (b4 == 'O' || 
         b4 == 'O') && (b7 == 'O' || b7 == 'O')) {
@@ -122,6 +124,7 @@ function checkBoard(){
         document.getElementById("b8").disabled = true;
         document.getElementById("b9").disabled = true;
         document.getElementById('print').innerHTML = "AI Won"
+        document.getElementById('roboText').innerHTML = 'Good Game!'
     }
     else if ((b7 == 'O' || b7 == 'O') && (b8 == 'O' || 
         b8 == 'O') && (b9 == 'O' || b9 == 'O')) {
@@ -132,6 +135,7 @@ function checkBoard(){
         document.getElementById("b5").disabled = true;
         document.getElementById("b6").disabled = true;
         document.getElementById('print').innerHTML = "AI Won"
+        document.getElementById('roboText').innerHTML = 'Good Game!'
     }
     else if ((b3 == 'O' || b3 == 'O') && (b6 == 'O' || 
         b6 == 'O') && (b9 == 'O' || b9 == 'O')) {
@@ -142,6 +146,7 @@ function checkBoard(){
         document.getElementById("b7").disabled = true;
         document.getElementById("b8").disabled = true;
         document.getElementById('print').innerHTML = "AI Won"
+        document.getElementById('roboText').innerHTML = 'Good Game!'
     }
     else if ((b1 == 'O' || b1 == 'O') && (b5 == 'O' || 
         b5 == 'O') && (b9 == 'O' || b9 == 'O')) {
@@ -152,6 +157,7 @@ function checkBoard(){
         document.getElementById("b7").disabled = true;
         document.getElementById("b8").disabled = true;
         document.getElementById('print').innerHTML = "AI Won"
+        document.getElementById('roboText').innerHTML = 'Good Game!'
     }
     else if ((b3 == 'O' || b3 == 'O') && (b5 == 'O' || 
         b5 == 'O') && (b7 == 'O' || b7 == 'O')) {
@@ -162,6 +168,7 @@ function checkBoard(){
         document.getElementById("b8").disabled = true;
         document.getElementById("b9").disabled = true;
         document.getElementById('print').innerHTML = "AI Won"
+        document.getElementById('roboText').innerHTML = 'Good Game!'
     }
     else if ((b2 == 'O' || b2 == 'O') && (b5 == 'O' || 
         b5 == 'O') && (b8 == 'O' || b8 == 'O')) {
@@ -172,6 +179,7 @@ function checkBoard(){
         document.getElementById("b7").disabled = true;
         document.getElementById("b9").disabled = true;
         document.getElementById('print').innerHTML = "AI Won"
+        document.getElementById('roboText').innerHTML = 'Good Game!'
     }
     else if ((b4 == 'O' || b4 == 'O') && (b5 == 'O' || 
         b5 == 'O') && (b6 == 'O' || b6 == 'O')) {
@@ -182,6 +190,7 @@ function checkBoard(){
         document.getElementById("b8").disabled = true;
         document.getElementById("b9").disabled = true;
         document.getElementById('print').innerHTML = "AI Won"
+        document.getElementById('roboText').innerHTML = 'Good Game!'
     }
   
     // Checking of Player 0 finish
@@ -193,6 +202,7 @@ function checkBoard(){
         (b7 == 'X' || b7 == 'O') && (b8 == 'X' || 
         b8 == 'O') && (b9 == 'X' || b9 == 'O')) {
         document.getElementById('print').innerHTML = "Tie"
+        document.getElementById('roboText').innerHTML = 'You are a worthy opponent!'
     }
 }
 
@@ -205,17 +215,25 @@ function start() {
     let moves = getMoves(board)
     let best = {}
     let bestVal = -1
+    perms = 0
     //console.log(moves)
     if(moves){
         for (let move of moves){//do a minimax call for each possible strating move
             let newBoard = copyBoard(board)
             newBoard[move.y][move.x] = 'O'
             let currVal = minimax(newBoard, false)
-            if(currVal > bestVal){
+            if(currVal > bestVal){ //take the best move
                 best = move
                 bestVal = currVal
             }
         }
+        if(bestVal == 1){
+            document.getElementById('roboText').innerHTML = `I have calculated ${perms} positions and you have lost!`
+        }
+        else if(bestVal == 0){
+            document.getElementById('roboText').innerHTML = `I have calculated ${perms} positions and we are evenely matched`
+        }
+        
         console.log(bestVal)
         //console.log(best)
         board[best.y][best.x] = 'O'
@@ -262,11 +280,15 @@ function start() {
     }
 }
 
-
+//AI positive eval
+//Player negative eval
+//consider: win, draw (1 = AI win, 0 = draw, -1 = player win)
+//assume: I am able to calculate moves to max depth
 
 function minimax(currentBoard, maximizing){ 
   //get valid moves, if no valid moves then reached depth
   let curr = 0
+  
   //console.log(currentBoard)
   if(winningMove(currentBoard, 'O') && !maximizing){
     return 1
@@ -274,18 +296,13 @@ function minimax(currentBoard, maximizing){
   if(winningMove(currentBoard, 'X') && maximizing){
     return -1
   }
+  perms++
   if(maximizing){ //Looking at moves for AI
     let moves = getMoves(currentBoard)
     if(moves.length == 0){
         return 0
     }
-    /*
-    for(let move of moves){//check for winning moves
-        if(winningMove(currentBoard, 'O')){ 
-            return 1
-        }
-    }*/
-    if(winningMove(currentBoard, 'O')){
+    if(winningMove(currentBoard, 'O')){ //Check if current board is winning for AI, if so then no need to evaluate beyond this
         return 1
     }
     curr = -1
@@ -301,13 +318,7 @@ function minimax(currentBoard, maximizing){
     if(moves.length == 0){
         return 0
     }
-    /*
-    for(let move of moves){//check for winning moves
-        if(winningMove(currentBoard, 'X')){
-            return -1
-        }
-    }*/
-    if(winningMove(currentBoard, 'X')){
+    if(winningMove(currentBoard, 'X')){ //Check if current board is winning for player, if so then no need to evaluate beyond this
         return -1
     }
     curr = 1
@@ -365,20 +376,17 @@ function winningMove(newBoard, player){
             return true
         }
     }
-    if(currentBoard[0][2] == player && currentBoard[1][1] == player && currentBoard[2][0] == player){
+    if(currentBoard[0][2] == player && currentBoard[1][1] == player && currentBoard[2][0] == player){ //top right to bottom left
         return true
     }
     return false
 }
 
-//AI positive eval
-//Player negative eval
-//consider: win, draw (1 = AI win, 0 = draw, -1 = player win)
-//assume: I am able to calculate moves to max depth
+
 
   
 
-function copyBoard(arr){
+function copyBoard(arr){ //copy board by value
     let temp = [[]]
     for(let i = 0; i < arr.length; i++){
       for(let j = 0; j < arr[0].length; j++){
@@ -424,12 +432,14 @@ function reset() {
         //console.log('AI moving first')
         start()
     }
+    document.getElementById('roboText').innerHTML = 'Lets see if you can beat me!'
 }
   
 function myfunc_3() {
     document.getElementById("b1").value = "X";
     document.getElementById("b1").disabled = true;
     board[0][0] = 'X'
+    checkBoard()
     start()
 }
   
@@ -437,6 +447,7 @@ function myfunc_4() {
     document.getElementById("b2").value = "X";
     document.getElementById("b2").disabled = true;
     board[0][1] = 'X'
+    checkBoard()
     start()
 }
   
@@ -444,6 +455,7 @@ function myfunc_5() {
     document.getElementById("b3").value = "X";
     document.getElementById("b3").disabled = true;
     board[0][2] = 'X'
+    checkBoard()
     start()
 }
   
@@ -451,6 +463,7 @@ function myfunc_6() {
     document.getElementById("b4").value = "X";
     document.getElementById("b4").disabled = true;
     board[1][0] = 'X'
+    checkBoard()
     start()
 }
   
@@ -458,6 +471,7 @@ function myfunc_7() {
     document.getElementById("b5").value = "X";
     document.getElementById("b5").disabled = true;
     board[1][1] = 'X'
+    checkBoard()
     start()
 }
   
@@ -465,6 +479,7 @@ function myfunc_8() {
     document.getElementById("b6").value = "X";
     document.getElementById("b6").disabled = true;
     board[1][2] = 'X'
+    checkBoard()
     start()
 }
   
@@ -472,6 +487,7 @@ function myfunc_9() {
     document.getElementById("b7").value = "X";
     document.getElementById("b7").disabled = true;
     board[2][0] = 'X'
+    checkBoard()
     start()
 }
   
@@ -479,6 +495,7 @@ function myfunc_10() {
     document.getElementById("b8").value = "X";
     document.getElementById("b8").disabled = true;
     board[2][1] = 'X'
+    checkBoard()
     start()
 }
   
@@ -486,5 +503,6 @@ function myfunc_11() {
     document.getElementById("b9").value = "X";
     document.getElementById("b9").disabled = true;
     board[2][2] = 'X'
+    checkBoard()
     start()
 }
