@@ -7,7 +7,7 @@ let perms = 0
 function checkBoard(){
     console.log('\n')
     // Setting DOM to all boxes or input field
-    var b1, b2, b3, b4, b5, b6, b7, b8, b9;
+    let b1, b2, b3, b4, b5, b6, b7, b8, b9;
     b1 = document.getElementById("b1").value;
     b2 = document.getElementById("b2").value;
     b3 = document.getElementById("b3").value;
@@ -226,6 +226,9 @@ function start() {
                 best = move
                 bestVal = currVal
             }
+            if(currVal == 1){
+                break
+            }
         }
         if(bestVal == 1){
             document.getElementById('roboText').innerHTML = `I have analyzed ${perms} positions and you have lost!`
@@ -302,14 +305,14 @@ function minimax(currentBoard, maximizing){
     if(moves.length == 0){
         return 0
     }
-    if(winningMove(currentBoard, 'O')){ //Check if current board is winning for AI, if so then no need to evaluate beyond this
-        return 1
-    }
     curr = -1
     for(let move of moves){
         let newBoard = copyBoard(currentBoard)
         newBoard[move.y][move.x] = 'O'    
         curr = Math.max(minimax(newBoard, false), curr)
+        if(curr == 1){ //no need to continue branching if i already found a win in this path
+            return 1
+        }
     }
     
   }
@@ -318,14 +321,14 @@ function minimax(currentBoard, maximizing){
     if(moves.length == 0){
         return 0
     }
-    if(winningMove(currentBoard, 'X')){ //Check if current board is winning for player, if so then no need to evaluate beyond this
-        return -1
-    }
     curr = 1
     for(let move of moves){
         let newBoard = copyBoard(currentBoard)
         newBoard[move.y][move.x] = 'X'    
         curr = Math.min(minimax(newBoard, true), curr)
+        if(curr == -1){ //no need to continue branching if i already found a win in this path
+            return -1
+        }
     }
     
   }
@@ -345,7 +348,7 @@ function getMoves(currentBoard){
     return moves
 }
 
-function winningMove(newBoard, player){
+function winningMove(newBoard, player){ //check if current board is winning for specific player
     let currentBoard = copyBoard(newBoard)
     //console.log(currentBoard)
     for(let i = 0; i <= 2; i++){ //check horizontal lines
@@ -435,6 +438,7 @@ function reset() {
     document.getElementById('roboText').innerHTML = 'Lets see if you can beat me!'
 }
   
+//onclick functions for cells
 function myfunc_3() {
     document.getElementById("b1").value = "X";
     document.getElementById("b1").disabled = true;
