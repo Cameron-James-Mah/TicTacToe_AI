@@ -228,10 +228,10 @@ function start() {
             }
         }
         if(bestVal == 1){
-            document.getElementById('roboText').innerHTML = `I have calculated ${perms} positions and you have lost!`
+            document.getElementById('roboText').innerHTML = `I have analyzed ${perms} positions and you have lost!`
         }
         else if(bestVal == 0){
-            document.getElementById('roboText').innerHTML = `I have calculated ${perms} positions and we are evenely matched`
+            document.getElementById('roboText').innerHTML = `I have analyzed ${perms} positions and we are evenely matched`
         }
         
         console.log(bestVal)
